@@ -2,10 +2,6 @@ import { ViewElement } from "./viewElement.js";
 
 class PlayArea extends ViewElement
 {
-    get manager()
-    {
-        return this.#manager
-    }
     get div()
     {
         return this.#div
@@ -14,14 +10,12 @@ class PlayArea extends ViewElement
      * @type {HTMLDivElement}
      */
     #div
-    /**
-     * @type {SelectManager}
-     */
-    #manager
+
     constructor(manager)
     {
         super(manager)
-        this.div = this.container
+        this.#div = this.container
+        this.#div.className = "play-area"
     }
     /**
      * 
@@ -29,7 +23,10 @@ class PlayArea extends ViewElement
      */
     replaceContent(parent)
     {
-
+        parent.replaceChildren()
+        this.appendTo(parent)
     }
 
 }
+
+export { PlayArea }

@@ -3,6 +3,11 @@ class SelectManager
     /**
      * @type {NextQuestionCallback}
      */
+    set nextQuestionCallback(value)
+    {
+        this.#nextQuestionCallback = value
+    }
+
     set NextQuestionCallback(value)
     {
         this.#nextQuestionCallback = value
@@ -50,8 +55,22 @@ class SelectManager
      */
     play()
     {
-        this.questionNumber = 0
+        this.#questionNumber = 0
         this.#questionAnswers = []
+
+        if (this.#questions.length === 0)
+        {
+            if (this.#finishCallback)
+            {
+                this.#finishCallback([])
+            }
+            return
+        }
+
+        if (this.#nextQuestionCallback)
+        {
+            this.#nextQuestionCallback(this.#questions[this.#questionNumber])
+        }
 
     }
     /**
@@ -59,7 +78,7 @@ class SelectManager
      */
     reset()
     {
-
+        this.play()
     }
     /**
      * 
@@ -71,5 +90,30 @@ class SelectManager
         this.#questionAnswers.push(answer)
         this.#questionNumber++
 
+        if (this.#questionNumber < this.#questions.length)
+        {
+            if (this.#nextQuestionCallback)
+            {
+                this.#nextQuestionCallback(this.#questions[this.#questionNumber])
+            }
+            return
+        }
+
+        const resultArray = this.#questions.map((question, index) =>
+        {
+            return {
+                question: question.question,
+                selected: this.#questionAnswers[index],
+                rightAnswer: question.valid
+            }
+        })
+
+        if (this.#finishCallback)
+        {
+            this.#finishCallback(resultArray)
+        }
+
     }
 }
+
+export { SelectManager }

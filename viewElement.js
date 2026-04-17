@@ -8,6 +8,17 @@ class ViewElement
      * @type {HTMLDivElement}
      */
     #container
+
+    get manager()
+    {
+        return this.#manager
+    }
+
+    get container()
+    {
+        return this.#container
+    }
+
     constructor(manager)
     {
         this.#manager = manager
